@@ -1,6 +1,7 @@
 package v1
 
 import (
+	k8sv1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -66,6 +67,10 @@ type ManagedClusterSpec struct {
 	// If its value is zero, the Klusterlet agent will update its lease every 60 seconds by default
 	// +optional
 	LeaseDurationSeconds int32 `json:"leaseDurationSeconds,omitempty"`
+
+	// Taints is a property of managed cluster that allow a placement to repel a set of managed clusters.
+	// +optional
+	Taints []k8sv1.Taint `json:"taints,omitempty"`
 }
 
 // ClientConfig represents the apiserver address of the managed cluster.

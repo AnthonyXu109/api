@@ -1,6 +1,7 @@
 package v1alpha1
 
 import (
+	k8sv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -230,6 +231,11 @@ type PlacementSpec struct {
 	// Predicates represent a slice of predicates to select ManagedClusters. The predicates are ORed.
 	// +optional
 	Predicates []ClusterPredicate `json:"predicates,omitempty"`
+
+	// Tolerations are applied to placements, and allow (but do not require) the managed clusters with
+	// certain taints to schedule onto placements with matching tolerations.
+	// +optional
+	Tolerations []k8sv1.Toleration `json:"tolerations,omitempty"`
 }
 
 // ClusterPredicate represents a predicate to select ManagedClusters.
