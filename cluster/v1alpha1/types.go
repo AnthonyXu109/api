@@ -1,7 +1,6 @@
 package v1alpha1
 
 import (
-	k8sv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -235,8 +234,38 @@ type PlacementSpec struct {
 	// Tolerations are applied to placements, and allow (but do not require) the managed clusters with
 	// certain taints to schedule onto placements with matching tolerations.
 	// +optional
-	Tolerations []k8sv1.Toleration `json:"tolerations,omitempty"`
+	Tolerations []Toleration `json:"tolerations,omitempty"`
 }
+
+type Toleration struct {
+	// Key is the taint key that the toleration applies to. Empty means match all taint keys.
+	// If the key is empty, operator must be Exists; this combination means to match all values and all keys.
+	// +optional
+	Key string `json:"key,omitempty"`
+	// Operator represents a key's relationship to the value.
+	// Valid operators are Exists and Equal. Defaults to Equal.
+	// Exists is equivalent to wildcard for value, so that a pod can
+	// tolerate all taints of a particular category.
+	// +optional
+	Operator TolerationOperator `json:"operator,omitempty"`
+	// Value is the taint value the toleration matches to.
+	// If the operator is Exists, the value should be empty, otherwise just a regular string.
+	// +optional
+	Value string `json:"value,omitempty"`
+	// TolerationSeconds represents the period of time the toleration (which must only be effective
+	// under the Evict senario, otherwise this field should be ignored) tolerates the taint. By default,
+	// it is not set, which means tolerate the taint forever (do not evict). Zero and
+	// negative values will be treated as 0 (evict immediately) by the system.
+	// +optional
+	TolerationSeconds *int64 `json:"tolerationSeconds,omitempty"`
+}
+
+type TolerationOperator string
+
+const (
+	TolerationOpExists TolerationOperator = "Exists"
+	TolerationOpEqual  TolerationOperator = "Equal"
+)
 
 // ClusterPredicate represents a predicate to select ManagedClusters.
 type ClusterPredicate struct {

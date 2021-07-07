@@ -1,7 +1,6 @@
 package v1
 
 import (
-	k8sv1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -68,9 +67,20 @@ type ManagedClusterSpec struct {
 	// +optional
 	LeaseDurationSeconds int32 `json:"leaseDurationSeconds,omitempty"`
 
-	// Taints is a property of managed cluster that allow a placement to repel a set of managed clusters.
+	// Taints is a property of managed cluster that allow the cluster to be repelled when scheduling.
 	// +optional
-	Taints []k8sv1.Taint `json:"taints,omitempty"`
+	Taints []Taint `json:"taints,omitempty"`
+}
+
+type Taint struct {
+	// Required. The taint key to be applied to a node.
+	Key string `json:"key"`
+	// The taint value corresponding to the taint key.
+	// +optional
+	Value string `json:"value,omitempty"`
+	// TimeAdded represents the time at which the taint was added.
+	// +optional
+	TimeAdded *metav1.Time `json:"timeadded,omitempty"`
 }
 
 // ClientConfig represents the apiserver address of the managed cluster.
